@@ -12,17 +12,21 @@ resource "aws_vpc" "main" {
 #############################################################################################################
 # Create public subnet to attach Internet Gateway route
 #############################################################################################################
-resource "aws_subnet" "public" {
-  count                   = "${var.subnet_count}"
+resource "aws_subnet" "public_static" {
+  count                   = "${var.disable_autocreate_subnet}"
   vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "${cidrsubnet(aws_vpc.main.cidr_block, 8, var.subnet_int + count.index)}"
+  cidr_block              = "${var.subnet_cidr_block}"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_subnet" "public_dynamic" {
+  count                   = "${var.enable_autocreate_subnet}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "${cidrsubnet(aws_vpc.main.cidr_block, 8, var.subnet_init_value + count.index)}"
   availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
   map_public_ip_on_launch = true
-
-  tags = {
-    Name = "public_network"
-  }
 }
+
 
 #############################################################################################################
 # Attach internet gateway to created VPC
