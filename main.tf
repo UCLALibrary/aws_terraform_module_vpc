@@ -61,3 +61,18 @@ resource "aws_nat_gateway" "private_nat_gw" {
   depends_on = ["aws_internet_gateway.gw"]
 }
 
+resource "aws_route_table" "route_table_private_nat" {
+  count = "${var.private_subnet_count > 0 ? 1 : 0}"
+  vpc_id = "${aws_vpc.main.id}"
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = "${aws_nat_gateway.private_nat_gw[0].id}"
+  }
+}
+
+resource "aws_route_table_association" "route_private_subnets" {
+  for_each = toset(aws_subnet.private.*.id)
+  subnet_id = each.key
+  route_table_id = "${aws_route_table.route_table_private_nat[0].id}"
+}
+
