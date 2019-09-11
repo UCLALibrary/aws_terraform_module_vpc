@@ -10,3 +10,4 @@ variable "private_subnet_count" { default = 0 }
 
 variable "vpc_endpoint" {}
 variable "create_vpc_endpoint" { default = 0 }
+
