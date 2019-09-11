@@ -44,8 +44,8 @@ resource "aws_route_table" "route_table_ig_gw" {
 }
 
 resource "aws_route_table_association" "route_public_subnets" {
-  count = "${var.public_subnet_count}"
-  subnet_id = "${aws_subnet.public[count.index - 1].id}"
+  for_each = toset(aws_subnet.public.*.id)
+  subnet_id = each.key
   route_table_id = "${aws_route_table.route_table_ig_gw.id}"
 }
 
