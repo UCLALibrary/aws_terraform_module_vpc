@@ -70,10 +70,16 @@ resource "aws_route_table" "route_table_private_nat" {
   }
 }
 
-resource "aws_route_table_association" "route_private_subnets" {
+resource "aws_route_table_association" "dynamic_nat_route_private_subnets" {
   for_each  = var.enable_nat > 0 ? toset(aws_subnet.private.*.id) : []
   subnet_id = each.key
   route_table_id = "${aws_route_table.route_table_private_nat[0].id}"
+}
+
+resource "aws_route_table_association" "override_nat_route_private_subnets" {
+  for_each  = var.associate_existing_nat > 0 ? toset(aws_subnet.private.*.id): []
+  subnet_id = each.key
+  route_table_id = "${var.existing_private_nat_gateway_id}"
 }
 
 resource "aws_vpc_endpoint" "s3" {
