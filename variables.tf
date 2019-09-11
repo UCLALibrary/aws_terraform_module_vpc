@@ -8,3 +8,5 @@ variable "public_subnet_count" { default = 1 }
 variable "private_subnet_init_value" {}
 variable "private_subnet_count" { default = 0 }
 
+variable "vpc_endpoint" {}
+variable "create_vpc_endpoint" { default = 0 }
