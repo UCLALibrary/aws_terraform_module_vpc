@@ -76,6 +76,13 @@ resource "aws_route_table_association" "dynamic_nat_route_private_subnets" {
   route_table_id = "${aws_route_table.route_table_private_nat[0].id}"
 }
 
+resource "aws_route_table_association" "override_nat_route_private_subnets" {
+  for_each  = var.associate_existing_nat > 0 ? toset(aws_subnet.private.*.id) : []
+  subnet_id = each.key
+  route_table_id = "${aws_route_table.route_table_private_nat[0].id}"
+}
+
+
 #resource "aws_route_table_association" "override_nat_route_private_subnets" {
 #  for_each  = var.associate_existing_nat > 0 ? toset(aws_subnet.private.*.id) : []
 #  subnet_id = each.key
