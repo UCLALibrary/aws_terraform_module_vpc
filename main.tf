@@ -49,3 +49,15 @@ resource "aws_route_table_association" "route_public_subnets" {
   route_table_id = "${aws_route_table.route_table_ig_gw.id}"
 }
 
+resource "aws_eip" "private_nat_eip" {
+  count = "${var.private_subnet_count > 0 ? 1 : 0}"
+  vpc   = true
+}
+
+resource "aws_nat_gateway" "private_nat_gw" {
+  count = "${var.private_subnet_count > 0 ? 1 : 0}"
+  allocation_id = "${aws_eip.private_nat_eip[0].id}"
+  subnet_id = "${aws_subnet.public[0].id}"
+  depends_on = ["aws_internet_gateway.gw"]
+}
+
