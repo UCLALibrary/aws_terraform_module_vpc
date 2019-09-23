@@ -86,6 +86,11 @@ resource "aws_vpc_endpoint" "s3" {
   count        = "${var.create_vpc_endpoint > 0 ? 1 : 0}"
   vpc_id       = "${aws_vpc.main.id}"
   service_name = "${var.vpc_endpoint}"
-  subnet_ids   = "${aws_subnet.private.*.id}"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "endpoint_route_on_nat" {
+  count           = "${var.create_vpc_endpoint > 0 ? 1 : 0}"
+  route_table_id  = "${aws_route_table.route_table_private_nat[0].id}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.s3[0].id}"
 }
 
