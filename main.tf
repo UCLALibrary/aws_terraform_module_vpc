@@ -86,5 +86,6 @@ resource "aws_vpc_endpoint" "s3" {
   count        = "${var.create_vpc_endpoint > 0 ? 1 : 0}"
   vpc_id       = "${aws_vpc.main.id}"
   service_name = "${var.vpc_endpoint}"
+  subnet_ids   = "${aws_subnet.private.*.id}"
 }
 
