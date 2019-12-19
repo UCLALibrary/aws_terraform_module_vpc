@@ -19,6 +19,6 @@ output "private_network_route_table" {
 }
 
 output "private_nat_gateway_id" {
-  value = "${aws_nat_gateway.private_nat_gw.id}"
+  value = "${aws_nat_gateway.private_nat_gw[0].id}"
 }
 
