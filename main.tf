@@ -5,17 +5,17 @@ data "aws_availability_zones" "available" {}
 # Create VPC network
 #############################################################################################################
 resource "aws_vpc" "main" {
-  cidr_block = "${var.vpc_cidr_block}"
+  cidr_block = var.vpc_cidr_block
 }
 
 #############################################################################################################
 # Create public subnet to attach Internet Gateway route
 #############################################################################################################
 resource "aws_subnet" "public" {
-  count                   = "${var.public_subnet_count}"
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "${cidrsubnet(aws_vpc.main.cidr_block, 8, var.public_subnet_init_value + count.index)}"
-  availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
+  count                   = var.public_subnet_count
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, var.public_subnet_init_value + count.index)
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
 }
 
