@@ -2,6 +2,10 @@ variable "vpc_cidr_block" {
   default = "10.0.0.0/16"
 }
 
+variable "default_tag" {
+  default = "VPC-Terraform"
+}
+
 variable "public_subnet_init_value" {}
 variable "public_subnet_count" {
   default = 1
