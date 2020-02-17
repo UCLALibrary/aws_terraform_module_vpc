@@ -95,5 +95,5 @@ resource "aws_route_table" "nat_egress_global" {
 resource "aws_route_table_association" "nat_route_private_subnets" {
   for_each  = (var.force_nat_egress > 0 ? toset(aws_subnet.private.*.id) : [])
   subnet_id = each.key
-  route_table_id = "${aws_route_table.nat_egress_global.id}"
+  route_table_id = "${aws_route_table.nat_egress_global[count.index].id}"
 }
