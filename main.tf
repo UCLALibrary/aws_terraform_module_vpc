@@ -97,12 +97,3 @@ resource "aws_route_table_association" "nat_route_private_subnets" {
   subnet_id = each.key
   route_table_id = "${aws_route_table.nat_egress_global[0].id}"
 }
-
-#############################################################################################################
-# Create VPC endpoints
-#############################################################################################################
-resource "aws_vpc_endpoint" "s3" {
-  count        = "${var.create_vpc_endpoint > 0 ? 1 : 0}"
-  vpc_id       = "${aws_vpc.main.id}"
-  service_name = "${var.vpc_endpoint}"
-}
