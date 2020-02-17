@@ -15,9 +15,9 @@ output "public_egress_route_table_id" {
 }
 
 output "private_nat_egress_route_table_id" {
-  value = length(aws_route_table.nat_egress_global.this) > 0 ? aws_route_table.nat_egress_global[0].id: null
+  value = length(aws_route_table.nat_egress_global) > 0 ? aws_route_table.nat_egress_global[0].id: null
 }
 
 output "private_nat_gateway_id" {
-  value = length(aws_nat_gateway.private_nat_gw.this) > 0 ? aws_nat_gateway.private_nat_gw[0].id: null
+  value = length(aws_nat_gateway.private_nat_gw) > 0 ? aws_nat_gateway.private_nat_gw[0].id: null
 }
