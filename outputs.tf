@@ -15,10 +15,9 @@ output "public_egress_route_table_id" {
 }
 
 output "private_nat_egress_route_table_id" {
-  value = "${aws_route_table.nat_egress_global[0].id}"
+  value = "${aws_route_table.nat_egress_global[count.index].id}"
 }
 
 output "private_nat_gateway_id" {
-  value = "${aws_nat_gateway.private_nat_gw[0].id}"
+  value = "${aws_nat_gateway.private_nat_gw[count.index].id}"
 }
-
