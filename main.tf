@@ -71,8 +71,8 @@ resource "aws_eip" "private_nat_eip" {
 #############################################################################################################
 resource "aws_nat_gateway" "private_nat_gw" {
   count = "${var.enable_nat > 0 ? 1 : 0}"
-  allocation_id = "${aws_eip.private_nat_eip[0].id}"
-  subnet_id = "${aws_subnet.public[0].id}"
+  allocation_id = "${aws_eip.private_nat_eip[count.index].id}"
+  subnet_id = "${aws_subnet.public[count.index].id}"
   depends_on = ["aws_internet_gateway.gw"]
 }
 
@@ -84,7 +84,7 @@ resource "aws_route_table" "nat_egress_global" {
   vpc_id = "${aws_vpc.main.id}"
   route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.private_nat_gw[0].id}"
+    nat_gateway_id = "${aws_nat_gateway.private_nat_gw[count.index].id}"
   }
 }
 
@@ -95,5 +95,5 @@ resource "aws_route_table" "nat_egress_global" {
 resource "aws_route_table_association" "nat_route_private_subnets" {
   for_each  = (var.force_nat_egress > 0 ? toset(aws_subnet.private.*.id) : [])
   subnet_id = each.key
-  route_table_id = "${aws_route_table.nat_egress_global[0].id}"
+  route_table_id = "${aws_route_table.nat_egress_global[count.index].id}"
 }
