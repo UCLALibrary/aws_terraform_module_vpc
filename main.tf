@@ -52,7 +52,7 @@ resource "aws_route_table" "egress_global" {
 # Assocate route table containing IGW egress access to public subnets
 #############################################################################################################
 resource "aws_route_table_association" "route_public_subnets" {
-  for_each = toset(aws_subnet.public.*.id)
+  for_each = aws_subnet.public.*.id
   subnet_id = each.key
   route_table_id = "${aws_route_table.egress_global.id}"
 }
