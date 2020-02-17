@@ -93,6 +93,7 @@ resource "aws_route_table" "nat_egress_global" {
 # WARNING: This can get expensive if you're unsure what your egress traffic looks like
 #############################################################################################################
 resource "aws_route_table_association" "nat_route_private_subnets" {
+  count = "${var.force_nat_egress > 0 ? 1 : 0}"
   for_each  = (var.force_nat_egress > 0 ? toset(aws_subnet.private.*.id) : [])
   subnet_id = each.key
   route_table_id = "${aws_route_table.nat_egress_global[count.index].id}"
