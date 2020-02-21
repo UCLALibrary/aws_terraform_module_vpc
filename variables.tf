@@ -11,9 +11,7 @@ variable "default_tag_map" {
 
 variable "vpc_tag_map" {
   type = map
-  default = {
-    "Name" = "VPC-Terraform"
-  }
+  default = null
 }
 
 variable "subnet_tag_map" {
