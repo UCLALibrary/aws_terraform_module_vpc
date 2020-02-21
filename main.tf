@@ -7,9 +7,7 @@ data "aws_availability_zones" "available" {}
 resource "aws_vpc" "main" {
   cidr_block              = var.vpc_cidr_block
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -22,9 +20,7 @@ resource "aws_subnet" "public" {
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -37,9 +33,7 @@ resource "aws_subnet" "private" {
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = false
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -48,9 +42,7 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "gw" {
   vpc_id                  = aws_vpc.main.id
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -63,9 +55,7 @@ resource "aws_route_table" "egress_global" {
     gateway_id            = aws_internet_gateway.gw.id
   }
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -84,9 +74,7 @@ resource "aws_eip" "private_nat_eip" {
   count                   = var.enable_nat > 0 ? 1 : 0
   vpc                     = true
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -99,9 +87,7 @@ resource "aws_nat_gateway" "private_nat_gw" {
   subnet_id               = aws_subnet.public[count.index].id
   depends_on              = [aws_internet_gateway.gw]
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
@@ -115,9 +101,7 @@ resource "aws_route_table" "nat_egress_global" {
     nat_gateway_id        = aws_nat_gateway.private_nat_gw[count.index].id
   }
 
-  tags                    = {
-    Name                  = var.default_tag
-  }
+  tags                    = var.tag_map
 }
 
 #############################################################################################################
