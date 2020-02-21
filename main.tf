@@ -7,7 +7,7 @@ data "aws_availability_zones" "available" {}
 resource "aws_vpc" "main" {
   cidr_block              = var.vpc_cidr_block
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.vpc_tag_map != null ? var.vpc_tag_map : var.default_tag_map
 }
 
 #############################################################################################################
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "gw" {
   vpc_id                  = aws_vpc.main.id
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.default_tag_map
 }
 
 #############################################################################################################
@@ -55,7 +55,7 @@ resource "aws_route_table" "egress_global" {
     gateway_id            = aws_internet_gateway.gw.id
   }
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.default_tag_map
 }
 
 #############################################################################################################
@@ -74,7 +74,7 @@ resource "aws_eip" "private_nat_eip" {
   count                   = var.enable_nat > 0 ? 1 : 0
   vpc                     = true
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.default_tag_map
 }
 
 #############################################################################################################
@@ -87,7 +87,7 @@ resource "aws_nat_gateway" "private_nat_gw" {
   subnet_id               = aws_subnet.public[count.index].id
   depends_on              = [aws_internet_gateway.gw]
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.default_tag_map
 }
 
 #############################################################################################################
@@ -101,7 +101,7 @@ resource "aws_route_table" "nat_egress_global" {
     nat_gateway_id        = aws_nat_gateway.private_nat_gw[count.index].id
   }
 
-  tags                    = var.vpc_tag_map
+  tags                    = var.default_tag_map
 }
 
 #############################################################################################################

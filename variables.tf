@@ -2,6 +2,13 @@ variable "vpc_cidr_block" {
   default = "10.0.0.0/16"
 }
 
+variable "default_tag_map" {
+  type = map
+  default = {
+    "Name" = "VPC-Terraform"
+  }
+}
+
 variable "vpc_tag_map" {
   type = map
   default = {
