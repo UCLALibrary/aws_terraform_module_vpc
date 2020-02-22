@@ -21,3 +21,8 @@ output "private_nat_egress_route_table_id" {
 output "private_nat_gateway_id" {
   value = length(aws_nat_gateway.private_nat_gw) > 0 ? aws_nat_gateway.private_nat_gw[0].id: null
 }
+
+output "public_igw_id" {
+  value = aws_internet_gateway.gw.id
+}
+
