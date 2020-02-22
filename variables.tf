@@ -2,8 +2,23 @@ variable "vpc_cidr_block" {
   default = "10.0.0.0/16"
 }
 
-variable "default_tag" {
-  default = "VPC-Terraform"
+variable "default_tag_map" {
+  type = map
+  default = {
+    "Name" = "VPC-Terraform"
+  }
+}
+
+variable "vpc_tag_map" {
+  type = map
+  default = null
+}
+
+variable "subnet_tag_map" {
+  type = map
+  default = {
+    "Name" = "VPC-Terraform"
+  }
 }
 
 variable "public_subnet_init_value" {}
@@ -22,3 +37,4 @@ variable "enable_nat" {
 variable "force_nat_egress" {
   default = 0
 }
+
